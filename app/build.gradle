@@ -16,14 +16,14 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
+    /*signingConfigs {
         release {
             storeFile file("../release.keystore")
             storePassword System.getenv('STOREPASSWORD')
             keyAlias "myapp"
             keypassword System.getenv('KEY_PASSWORD')
         }
-    }
+    }*/
 
     buildTypes {
         release {
