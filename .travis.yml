@@ -1,0 +1,52 @@
+language: android
+android:
+  components:
+    - build-tools-29.0.3
+    - android-29
+    - android-21
+    - add-on
+    - extra
+    - platform-tools
+    - tools
+    - extra-google-googleplayservices
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - addon-google_apis-google-29
+    - sys-img-armeabi-v8a-android-21
+
+before_install:
+  - yes | sdkmanager "platforms;android-29"
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_KEY
+  file: app/build/outputs/release/app-release.apk
+  skip_cleanup: true
+  on:
+    tags: true
+
+notifications:
+  email:
+    recipients:
+    - xxt07d@gmail.com
+    on_success: always
+    on_failure: always
+
+#gradle taskok, alapbol ./gradlew build connetedCheck
+script: ./gradlew :app:build
+#ui testek eseteben
+#script: ./gradlew :app:build :app:connectedDebugAndroidTest
+
+#emulatorok kezelese
+env:
+  global:
+    - MALLOC_ARENA_MAX=2
+
+sudo: required
+
+#82es a kepernyofeloldas, wait-for-device = csak akkor, ha elindult az emulator
+before_script:
+  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a -s "768x1280"
+  - emulator -avd test -no-audio -no-window &
+  - adb wait-for-device
+  - adb shell input keyevent 82 &
