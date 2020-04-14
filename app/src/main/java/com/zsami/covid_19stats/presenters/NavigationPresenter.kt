@@ -1,11 +1,17 @@
 package com.zsami.covid_19stats.presenters
 
-object NavigationPresenter : Presenter<NavigationPresenter>() {
-    override fun attachScreen(screen: NavigationPresenter) {
+import com.zsami.covid_19stats.screens.NavigationScreen
+
+object NavigationPresenter : Presenter<NavigationScreen>() {
+    override fun attachScreen(screen: NavigationScreen) {
         super.attachScreen(screen)
     }
 
     override fun detachScreen() {
         super.detachScreen()
+    }
+
+    fun doNavigationStuff() {
+        
     }
 }

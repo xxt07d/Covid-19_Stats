@@ -10,4 +10,8 @@ object DetailedPresenter : Presenter<DetailedScreen>() {
     override fun detachScreen() {
         super.detachScreen()
     }
+
+    fun doDetailedStuff() {
+
+    }
 }
