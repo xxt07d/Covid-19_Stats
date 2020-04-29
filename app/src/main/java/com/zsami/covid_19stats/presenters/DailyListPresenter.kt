@@ -15,6 +15,6 @@ object DailyListPresenter : Presenter<DailyListScreen>() {
     }
 
     fun doDailyListStuff() {
-        networkInteractor?.getData()
+        //TODO
     }
 }
