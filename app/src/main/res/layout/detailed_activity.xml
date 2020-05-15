@@ -1,7 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activites.DetailedActivity" />
+    tools:context=".activites.DetailedActivity" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="409dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/registeredTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="61dp"
+            android:layout_marginLeft="61dp"
+            android:layout_marginTop="108dp"
+            android:text="@string/daily_detail_registered"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.814"
+            app:layout_constraintStart_toStartOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
+        <TextView
+            android:id="@+id/activeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="116dp"
+            android:layout_marginLeft="116dp"
+            android:layout_marginTop="19dp"
+            android:text="@string/daily_detail_active"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registeredTextView" />
+
+        <TextView
+            android:id="@+id/deathsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="116dp"
+            android:layout_marginLeft="116dp"
+            android:layout_marginTop="18dp"
+            android:text="@string/daily_detail_deaths"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/activeTextView" />
+
+        <TextView
+            android:id="@+id/recoveredTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="88dp"
+            android:layout_marginLeft="88dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/daily_detail_recovered"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/deathsTextView" />
+
+        <TextView
+            android:id="@+id/registeredNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="47dp"
+            android:layout_marginLeft="47dp"
+            android:layout_marginTop="108dp"
+            android:text="NumberTextView"
+            app:layout_constraintStart_toEndOf="@+id/registeredTextView"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <TextView
+            android:id="@+id/activeNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="47dp"
+            android:layout_marginLeft="47dp"
+            android:layout_marginTop="19dp"
+            android:text="NumberTextView"
+            app:layout_constraintStart_toEndOf="@+id/activeTextView"
+            app:layout_constraintTop_toBottomOf="@+id/registeredNumberTextView" />
+
+        <TextView
+            android:id="@+id/deathsNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="47dp"
+            android:layout_marginLeft="47dp"
+            android:layout_marginTop="18dp"
+            android:text="NumberTextView"
+            app:layout_constraintStart_toEndOf="@+id/deathsTextView"
+            app:layout_constraintTop_toBottomOf="@+id/activeNumberTextView" />
+
+        <TextView
+            android:id="@+id/recoveredNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="47dp"
+            android:layout_marginLeft="47dp"
+            android:layout_marginTop="15dp"
+            android:text="NumberTextView"
+            app:layout_constraintStart_toEndOf="@+id/recoveredTextView"
+            app:layout_constraintTop_toBottomOf="@+id/deathsNumberTextView" />
+
+        <TextView
+            android:id="@+id/motivationalTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="136dp"
+            android:layout_marginLeft="136dp"
+            android:layout_marginTop="92dp"
+            android:text="motivationalTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recoveredTextView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
