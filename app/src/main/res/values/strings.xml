@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Covid-19 Stats</string>
+
+    <!-- Daily Detail Strings -->
+    <string name="daily_detail_registered">Registered infections:</string>
+    <string name="daily_detail_active">Active cases:</string>
+    <string name="daily_detail_deaths">Total deaths:</string>
+    <string name="daily_detail_recovered">Recovered cases:</string>
+    <string-array name="daily_detail_positive_stuff">
+        <item>Stay home and always wash your hands!</item>
+        <item>Never give up!</item>
+        <item>This is the unique time when you can be a real hero while gaming ;)</item>
+        <item>Get yourself a nice book! Maybe you have a lot of stories waiting to be told...</item>
+    </string-array>
+
+
+    <!-- Statistic List Strings -->
+    <string name="statistic_list_new_cases">new cases</string>
+
+    <!-- Navigation Strings -->
+    <string name="navigation_about">About</string>
+    <string name="navigation_statistic_list">Statistic List</string>
+
+    <!-- About Strings -->
+    <string name="about_app_version">App v0.1</string>
+    <string name="about_rights">All rights reserved</string>
+    <string name="about_thank_you">Thanks You for keep using my application. :)</string>
 </resources>
