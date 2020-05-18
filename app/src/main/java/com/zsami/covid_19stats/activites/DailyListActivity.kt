@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.zsami.covid_19stats.R
 import com.zsami.covid_19stats.adapters.DailyRecyclerViewAdapter
+import com.zsami.covid_19stats.adapters.DailyRecyclerViewAdapter.*
 import com.zsami.covid_19stats.data.AppDatabase
 import com.zsami.covid_19stats.data.Daily
 import com.zsami.covid_19stats.interactors.NetworkInteractor
@@ -18,10 +19,12 @@ import com.zsami.covid_19stats.screens.DailyListScreen
 import java.lang.Exception
 import java.util.Date
 
+const val EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE"
+
 class DailyListActivity : AppCompatActivity(), DailyListScreen {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewAdapter: DailyRecyclerViewAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     private var networkInteractor: NetworkInteractor = NetworkInteractor.getInstance()
@@ -36,25 +39,14 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.daily_list_activity)
-        database = Room.inMemoryDatabaseBuilder(this.baseContext,
-            AppDatabase::class.java)
-            .allowMainThreadQueries()
-            .build()
+        database = AppDatabase.getInstance(this.baseContext)
         startCountryName = "Bulgaria"
         countryName = "Hungary"
-
-        var button: Button = findViewById(R.id.button)
-        button.setOnClickListener {
-            val intent = Intent(this, DetailedActivity::class.java)
-            startActivity(intent)
-        }
-
 
 
         try{
             Thread(Runnable {
                 dailyListGetDailyData()
-
             }).start()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -93,7 +85,7 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
         networkDailies?.forEach{
             val daily: Daily = Daily(
                 dayId = null,
-                date = it.Date.substring(0,9),
+                date = it.Date.substring(0,10),
                 country = it.Country,
                 infections = it.Confirmed.toLong(),
                 deaths =  it.Deaths.toLong(),
@@ -106,6 +98,30 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
         if (databaseDailies.size > 0) {
             database.clearAllTables()
             database.dailyDao().insertDailies()
+        }
+
+        runOnUiThread {
+            val reversedList = networkDailies!!.reversed()
+            viewAdapter = DailyRecyclerViewAdapter(reversedList)
+            viewAdapter.setOnItemClickListener(
+                object : OnItemClickListener {
+                    override fun onItemclick(position: Int) {
+                        var extraMessageList = arrayOf(
+                            reversedList[position].Confirmed.toString(),
+                            reversedList[position].Active.toString(),
+                            reversedList[position].Deaths.toString(),
+                            reversedList[position].Recovered.toString()
+                        )
+                        val intent = Intent(applicationContext, DetailedActivity::class.java).apply {
+                            putExtra(EXTRA_MESSAGE, extraMessageList)
+                        }
+                        startActivity(intent)
+
+                    }
+                }
+            )
+            recyclerView.adapter = viewAdapter
+            viewAdapter.notifyDataSetChanged()
         }
     }
 

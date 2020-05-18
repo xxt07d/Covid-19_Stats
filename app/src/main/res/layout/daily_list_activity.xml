@@ -7,24 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".activites.DailyListActivity" >
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dailyRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/dailyRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="680dp">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-    </LinearLayout>
+    </androidx.recyclerview.widget.RecyclerView>
 
 </FrameLayout>

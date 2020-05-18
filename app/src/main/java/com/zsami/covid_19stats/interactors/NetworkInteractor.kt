@@ -66,8 +66,7 @@ class NetworkInteractor {
             }
 
             override fun onFailure(call: Call<List<Daily>>, t: Throwable) {
-                TODO("Not yet implemented")
-                responseReceived = true
+                //responseReceived = true
             }
         })
         while(!responseReceived){ //&& waitRepeatAmount < 20) {
