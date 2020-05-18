@@ -1,23 +1,29 @@
 package com.zsami.covid_19stats.activites
 
+
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.zsami.covid_19stats.R
 import com.zsami.covid_19stats.adapters.DailyRecyclerViewAdapter
-import com.zsami.covid_19stats.adapters.DailyRecyclerViewAdapter.*
+import com.zsami.covid_19stats.adapters.DailyRecyclerViewAdapter.OnItemClickListener
 import com.zsami.covid_19stats.data.AppDatabase
 import com.zsami.covid_19stats.data.Daily
 import com.zsami.covid_19stats.interactors.NetworkInteractor
 import com.zsami.covid_19stats.network.Country
 import com.zsami.covid_19stats.presenters.DailyListPresenter
 import com.zsami.covid_19stats.screens.DailyListScreen
-import java.lang.Exception
-import java.util.Date
+
 
 const val EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE"
 
@@ -30,23 +36,27 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
     private var networkInteractor: NetworkInteractor = NetworkInteractor.getInstance()
     private lateinit var database: AppDatabase
 
-    private lateinit var startCountryName: String
-    private lateinit var countryName: String
+    private lateinit var menu: Menu
 
     private var networkDailies: List<com.zsami.covid_19stats.network.Daily>? = arrayListOf()
+    private var networkCountries: List<String>? = arrayListOf()
+
+    companion object {
+        private var startCountryName: String = "Hungary"
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.daily_list_activity)
         database = AppDatabase.getInstance(this.baseContext)
-        startCountryName = "Bulgaria"
-        countryName = "Hungary"
+
 
 
         try{
             Thread(Runnable {
                 dailyListGetDailyData()
+                dailyListGetCountries()
             }).start()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -54,6 +64,45 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
         configureRecyclerView()
 
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        this.menu = menu!!
+        if(networkCountries!!.isNotEmpty()) {
+            menuInflater.inflate(R.menu.daily_list_menu, menu)
+            val item = menu!!.findItem(R.id.spinner)
+            var spinner = item.actionView as Spinner
+
+
+            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+                applicationContext,
+                R.layout.spinner_item,
+                networkCountries!!
+            )
+            adapter.setDropDownViewResource(R.layout.spinner_item)
+
+            spinner.adapter = adapter
+            spinner.setSelection(networkCountries!!.indexOf(startCountryName))
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    //do nothing
+                }
+
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    startCountryName = networkCountries!![spinner.selectedItemPosition]
+                    try{
+                        Thread(Runnable {
+                            dailyListGetDailyData()
+                        }).start()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+            }
+        }
+        return true
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -66,6 +115,8 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
     }
 
 
+
+
     override fun dailyListGetDailyData(){
         if ( networkInteractor == null) {
             networkInteractor = NetworkInteractor()
@@ -76,10 +127,7 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
                 .allowMainThreadQueries()
                 .build()
         }
-        if (startCountryName != countryName) {
-            startCountryName = countryName
-        }
-        networkDailies = networkInteractor.getDailies(countryName.toLowerCase())
+        networkDailies = networkInteractor.getDailies(startCountryName.toLowerCase())
 
         var databaseDailies = arrayListOf<Daily>()
         networkDailies?.forEach{
@@ -101,7 +149,10 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
         }
 
         runOnUiThread {
-            val reversedList = networkDailies!!.reversed()
+            var reversedList: List<com.zsami.covid_19stats.network.Daily> = arrayListOf()
+            if(!networkDailies.isNullOrEmpty()) {
+                 reversedList = networkDailies!!.reversed()
+            }
             viewAdapter = DailyRecyclerViewAdapter(reversedList)
             viewAdapter.setOnItemClickListener(
                 object : OnItemClickListener {
@@ -135,12 +186,16 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
                 .allowMainThreadQueries()
                 .build()
         }
-        var countries: List<Country>? = networkInteractor.getCountries()
-        if (countries != null) {
-            database.clearAllTables()
-            database.dailyDao().insertDailies()
+        var countries = networkInteractor.getCountries()
+        var countryNameList = arrayListOf<String>()
+        countries?.forEach{
+            countryNameList.add(it.Country)
         }
-
+        countryNameList.sort()
+        networkCountries = countryNameList
+        runOnUiThread {
+            onCreateOptionsMenu(menu)
+        }
     }
 
     override fun foo() {

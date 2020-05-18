@@ -25,6 +25,7 @@ class NetworkInteractor {
             override fun onResponse(call: Call<List<Country>>, response: Response<List<Country>>) {
                 if(!response.isSuccessful) {
                     //itt kapok egy response kodot
+                    responseReceived = true
                     return
                 }
                 countries = response.body()
@@ -35,8 +36,7 @@ class NetworkInteractor {
             }
 
             override fun onFailure(call: Call<List<Country>>, t: Throwable) {
-                TODO("Not yet implemented")
-                responseReceived = true
+
             }
         })
         while(!responseReceived){ //&& waitRepeatAmount < 20) {
