@@ -39,6 +39,7 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
     private lateinit var menu: Menu
 
     private var networkDailies: List<com.zsami.covid_19stats.network.Daily>? = arrayListOf()
+    private var databaseDailies: List<Daily>? = arrayListOf()
     private var networkCountries: List<String>? = arrayListOf()
 
     companion object {
@@ -147,21 +148,23 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
             database.clearAllTables()
             database.dailyDao().insertDailies()
         }
-
+        var reversedList: List<Daily> = arrayListOf()
+        if(networkDailies.isNullOrEmpty()) {
+            reversedList = database.dailyDao().getAllDailies().reversed()
+        }
         runOnUiThread {
-            var reversedList: List<com.zsami.covid_19stats.network.Daily> = arrayListOf()
             if(!networkDailies.isNullOrEmpty()) {
-                 reversedList = networkDailies!!.reversed()
+                 reversedList = databaseDailies!!.reversed()
             }
             viewAdapter = DailyRecyclerViewAdapter(reversedList)
             viewAdapter.setOnItemClickListener(
                 object : OnItemClickListener {
                     override fun onItemclick(position: Int) {
                         var extraMessageList = arrayOf(
-                            reversedList[position].Confirmed.toString(),
-                            reversedList[position].Active.toString(),
-                            reversedList[position].Deaths.toString(),
-                            reversedList[position].Recovered.toString()
+                            reversedList[position].infections.toString(),
+                            reversedList[position].actives.toString(),
+                            reversedList[position].deaths.toString(),
+                            reversedList[position].recoveries.toString()
                         )
                         val intent = Intent(applicationContext, DetailedActivity::class.java).apply {
                             putExtra(EXTRA_MESSAGE, extraMessageList)
@@ -204,7 +207,7 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
 
     fun configureRecyclerView() {
         viewManager = LinearLayoutManager(this)
-        viewAdapter = DailyRecyclerViewAdapter(networkDailies!!)
+        viewAdapter = DailyRecyclerViewAdapter(databaseDailies!!.reversed())
 
         recyclerView = findViewById<RecyclerView>(R.id.dailyRecyclerView).apply {
             setHasFixedSize(true)

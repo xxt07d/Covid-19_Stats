@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.zsami.covid_19stats.R
-import com.zsami.covid_19stats.network.Daily
+import com.zsami.covid_19stats.data.Daily
 import java.time.LocalDate
 
 
@@ -44,12 +44,12 @@ class DailyRecyclerViewAdapter(private val myDataset: List<Daily>) :
     }
 
     override fun onBindViewHolder(holder: DailyRecyclerViewHolder, position: Int) {
-        val currentDate: String = myDataset[position].Date.substring(0,10)
+        val currentDate: String = myDataset[position].date.substring(0,10)
         var newCases: Int = 0
         newCases = if (position < myDataset.size-1) {
-            myDataset[position].Confirmed.toInt() - myDataset[position+1].Confirmed.toInt()
+            myDataset[position].infections.toInt() - myDataset[position+1].infections.toInt()
         } else {
-            myDataset[position].Confirmed.toInt()
+            myDataset[position].infections.toInt()
         }
         val currentCasesText: String = "${newCases} new cases"
         holder.mTextView1.text = currentDate
