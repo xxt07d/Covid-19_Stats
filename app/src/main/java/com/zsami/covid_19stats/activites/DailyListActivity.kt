@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.zsami.covid_19stats.R
 import com.zsami.covid_19stats.adapters.DailyRecyclerViewAdapter
 import com.zsami.covid_19stats.adapters.DailyRecyclerViewAdapter.OnItemClickListener
@@ -42,6 +43,9 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
     private var databaseDailies: List<Daily>? = arrayListOf()
     private var networkCountries: List<String>? = arrayListOf()
 
+    //analytics
+    private var mFirebaseAnalytics: FirebaseAnalytics? = null
+
     companion object {
         private var startCountryName: String = "Hungary"
     }
@@ -52,6 +56,7 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
         setContentView(R.layout.daily_list_activity)
         database = AppDatabase.getInstance(this.baseContext)
 
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
 
         try{
@@ -90,6 +95,9 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
 
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     startCountryName = networkCountries!![spinner.selectedItemPosition]
+                    if(startCountryName == "Albania"){
+                        throw NullPointerException()
+                    }
                     try{
                         Thread(Runnable {
                             dailyListGetDailyData()
@@ -108,6 +116,7 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
     override fun onStart() {
         super.onStart()
         DailyListPresenter.attachScreen(this)
+
     }
 
     override fun onStop() {
@@ -166,6 +175,13 @@ class DailyListActivity : AppCompatActivity(), DailyListScreen {
                             reversedList[position].deaths.toString(),
                             reversedList[position].recoveries.toString()
                         )
+                        if (reversedList[position].date == "2020-05-13") {
+                            throw NullPointerException()
+                        }
+                        val bundle = Bundle()
+                        bundle.putString("day",reversedList[position].date)
+                        mFirebaseAnalytics?.logEvent("day_opened", bundle)
+
                         val intent = Intent(applicationContext, DetailedActivity::class.java).apply {
                             putExtra(EXTRA_MESSAGE, extraMessageList)
                         }

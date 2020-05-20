@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1030454556134",
+    "firebase_url": "https://covid-19-stats-52346.firebaseio.com",
+    "project_id": "covid-19-stats-52346",
+    "storage_bucket": "covid-19-stats-52346.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030454556134:android:7efc4b88e8a3025f279227",
+        "android_client_info": {
+          "package_name": "com.zsami.covid_19stats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030454556134-uov6t4rt72nk2uh5t0f4avdnelb6abgk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjAy5GItBXqac31lejburOecZcBdw5GX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030454556134-uov6t4rt72nk2uh5t0f4avdnelb6abgk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
